@@ -1,0 +1,18 @@
+{
+    "id": "niriWindows",
+    "name": "Niri Windows",
+    "description": "List and switch to open Niri windows from the launcher",
+    "version": "1.0.0",
+    "author": "DMS Team",
+    "icon": "tab",
+    "type": "launcher",
+    "capabilities": ["launcher"],
+    "component": "./NiriWindowsLauncher.qml",
+    "settings": "./NiriWindowsSettings.qml",
+    "trigger": "!",
+    "requires_dms": ">0.1.18",
+    "permissions": [
+        "settings_read",
+        "settings_write"
+    ]
+}
