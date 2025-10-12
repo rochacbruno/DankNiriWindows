@@ -93,7 +93,7 @@ Item {
                 icon: icon,
                 comment: comment,
                 action: `focus:${windowId}`,
-                categories: ["NiriWindows"],
+                categories: ["Niri Windows"],  // Must match plugin name from plugin.json
                 // Store additional data for sorting
                 _isFocused: window.is_focused || false,
                 _workspaceIdx: workspace ? workspace.idx : 999
@@ -120,6 +120,8 @@ Item {
 
     // Required function: Execute item action
     function executeItem(item) {
+        console.log("NiriWindows: executeItem called with item:", JSON.stringify(item))
+
         if (!item || !item.action) {
             console.warn("NiriWindows: Invalid item or action")
             return
@@ -149,17 +151,26 @@ Item {
             return
         }
 
-        console.log("NiriWindows: Focusing window ID:", windowId)
+        console.log("NiriWindows: Attempting to focus window ID:", windowId, "type:", typeof windowId)
 
-        // Send the focus window command directly with properly formatted JSON
-        const request = JSON.stringify({"Action": {"FocusWindow": {"id": windowId}}})
-        const success = NiriService.send(request)
+        // Verify the window still exists
+        const window = NiriService.windows.find(w => w.id === windowId)
+        if (!window) {
+            console.warn("NiriWindows: Window ID", windowId, "not found in windows list")
+            showToast("Window not found")
+            return
+        }
+
+        console.log("NiriWindows: Found window:", window.app_id, window.title)
+
+        // Use NiriService's built-in focusWindow method
+        const success = NiriService.focusWindow(windowId)
+
+        console.log("NiriWindows: focusWindow returned:", success)
 
         if (!success) {
-            console.warn("NiriWindows: Failed to focus window", windowId)
+            console.warn("NiriWindows: Failed to send focus command")
             showToast("Failed to focus window")
-        } else {
-            console.log("NiriWindows: Successfully sent focus command for window", windowId)
         }
     }
 

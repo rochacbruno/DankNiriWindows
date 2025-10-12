@@ -2,6 +2,10 @@
 
 A launcher plugin that lists all open windows in the Niri window manager and allows quick switching between them.
 
+![Niri Windows Plugin Screenshot](screenshot.png)
+
+*Example: Type `!` to list all open windows with their workspace locations*
+
 ## Features
 
 - **Window Listing**: Displays all open windows from the Niri window manager
@@ -115,6 +119,7 @@ Settings are stored in `~/.config/DankMaterialShell/plugin_settings.json` under 
 - `NiriWindowsLauncher.qml` - Main launcher component
 - `NiriWindowsSettings.qml` - Settings UI
 - `README.md` - This documentation file
+- `screenshot.png` - Plugin screenshot
 
 ## Version
 
