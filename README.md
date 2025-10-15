@@ -20,12 +20,30 @@ A launcher plugin that lists all open windows in the Niri window manager and all
 
 ## Installation
 
-This plugin is located at `~/.config/DankMaterialShell/plugins/NiriWindows/`
+### Via DMS
+
+```bash
+dms plugins install NiriWindows
+```
+
+### Via DMS GUI
+- Mod + ,
+- Go to Plugins Tab
+- Choose Browse
+- Enable third party
+- install NiriWindows
+
+### Manually
+
+```
+cd ~/.config/DankMaterialShell/plugins
+git clone https://github.com/rochacbruno/DankNiriWindows NiriWindows
+```
 
 1. Open DMS Settings (Ctrl+,)
 2. Navigate to Plugins tab
 3. Click "Scan for Plugins"
-4. Enable the "Niri Windows" plugin with the toggle switch
+4. Enable the "NiriWindow" plugin with the toggle switch
 
 ## Requirements
 
@@ -56,6 +74,18 @@ You can configure a different trigger prefix or disable it entirely in the setti
 2. Change the trigger to a custom value (e.g., `win`, `@`, `w`)
 3. Or check "No trigger (always active)" to remove the prefix requirement
 4. In the launcher, type your configured trigger: `win firefox` or just `firefox` (if no trigger)
+
+
+### Adding a keybinding (niri)
+
+```kdl
+binds {
+      Alt+Tab hotkey-overlay-title="Switch Windows" {
+        spawn "dms" "ipc" "call" "spotlight" "openQuery" "!";
+    }
+}
+```
+
 
 ## Window Information Display
 
