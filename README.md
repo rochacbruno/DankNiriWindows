@@ -4,9 +4,16 @@
 
 A launcher plugin that lists all open windows in the Niri window manager and allows quick switching between them.
 
+*Example: Type `!` to list all open windows with their workspace locations*
+
+Grid Mode
+
 ![Niri Windows Plugin Screenshot](screenshot.png)
 
-*Example: Type `!` to list all open windows with their workspace locations*
+
+List Mode
+
+![Niri Windows Plugin Screenshot](list_mode.png)
 
 ## Features
 
