@@ -17,12 +17,13 @@ Created `.qmlls.ini` in the plugin directory with the following content:
 
 ```ini
 [General]
-DisableDefaultImports=false
-# Qt6 QML import paths - where Quickshell modules are installed
-# IMPORTANT: Use colon (:) as path separator on Unix systems, not comma
-importPaths=/usr/lib64/qt6/qml:/home/rochacbruno/.config/quickshell
 no-cmake-calls=true
+buildDir="/run/user/1000/quickshell/vfs/0c8e042c7cd2ac6750c31be2fde46ddb"
+importPaths="/usr/bin:/usr/lib64/qt6/qml"
 ```
+
+**IMPORTANT**:  The buildDir is dynamic, you have to update with the proper value,
+check the `.qmlls.ini` from the root of your dms folder
 
 **Location**: `/home/rochacbruno/.config/DankMaterialShell/plugins/NiriWindows/.qmlls.ini`
 
