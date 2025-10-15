@@ -1,5 +1,7 @@
 import QtQuick
+import Quickshell
 import qs.Services
+import qs.Common
 
 Item {
     id: root
@@ -77,14 +79,11 @@ Item {
             }
 
             // Try to get icon from desktop entry
-            let icon = "window"
-            try {
-                const desktopEntry = DesktopEntries.heuristicLookup(appId)
-                if (desktopEntry && desktopEntry.icon) {
-                    icon = desktopEntry.icon
-                }
-            } catch (e) {
-                // Fallback to default icon
+            // Note: Don't call Quickshell.iconPath() here - the spotlight renderer does that
+            let icon = appId // Start with app_id as icon name (works for many apps)
+            const desktopEntry = DesktopEntries.heuristicLookup(appId)
+            if (desktopEntry && desktopEntry.icon) {
+                icon = desktopEntry.icon
             }
 
             // Create launcher item
