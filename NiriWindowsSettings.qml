@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import qs.Common
 import qs.Widgets
 
 FocusScope {
@@ -13,20 +14,19 @@ FocusScope {
     Column {
         id: settingsColumn
         anchors.fill: parent
-        anchors.margins: 16
-        spacing: 16
+        anchors.margins: Theme.spacingL
+        spacing: Theme.spacingL
 
         Text {
             text: "Niri Windows Plugin Settings"
-            font.pixelSize: 18
-            font.weight: Font.Bold
-            color: "#FFFFFF"
+            font.pixelSize: Theme.fontSizeLarge
+            color: Theme.surfaceText
         }
 
         Text {
             text: "List and switch to open Niri windows from the launcher. This plugin integrates with the Niri window manager to provide quick window switching."
-            font.pixelSize: 14
-            color: "#CCFFFFFF"
+            font.pixelSize: Theme.fontSizeMedium
+            color: Theme.surfaceText
             wrapMode: Text.WordWrap
             width: parent.width - 32
         }
@@ -34,30 +34,30 @@ FocusScope {
         Rectangle {
             width: parent.width - 32
             height: 1
-            color: "#30FFFFFF"
+            color: Theme.outlineVariant
         }
 
         Column {
-            spacing: 12
+            spacing: Theme.spacingM
             width: parent.width - 32
 
             Text {
                 text: "Trigger Configuration"
-                font.pixelSize: 16
+                font.pixelSize: Theme.fontSizeLarge
                 font.weight: Font.Medium
-                color: "#FFFFFF"
+                color: Theme.surfaceText
             }
 
             Text {
                 text: noTriggerToggle.checked ? "Window list is always active. Simply type an application name or window title in the launcher." : "Set a trigger prefix to activate the window switcher. Type the trigger followed by a search term."
-                font.pixelSize: 12
-                color: "#CCFFFFFF"
+                font.pixelSize: Theme.fontSizeSmall
+                color: Theme.surfaceText
                 wrapMode: Text.WordWrap
                 width: parent.width
             }
 
             Row {
-                spacing: 12
+                spacing: Theme.spacingM
 
                 CheckBox {
                     id: noTriggerToggle
@@ -66,8 +66,8 @@ FocusScope {
 
                     contentItem: Text {
                         text: noTriggerToggle.text
-                        font.pixelSize: 14
-                        color: "#FFFFFF"
+                        font.pixelSize: Theme.fontSizeMedium
+                        color: Theme.surfaceText
                         leftPadding: noTriggerToggle.indicator.width + 8
                         verticalAlignment: Text.AlignVCenter
                     }
@@ -75,17 +75,16 @@ FocusScope {
                     indicator: Rectangle {
                         implicitWidth: 20
                         implicitHeight: 20
-                        radius: 4
-                        border.color: noTriggerToggle.checked ? "#4CAF50" : "#60FFFFFF"
+                        radius: Theme.cornerRadiusSmall
+                        border.color: Theme.primary
                         border.width: 2
-                        color: noTriggerToggle.checked ? "#4CAF50" : "transparent"
+                        color: "transparent"
 
                         Rectangle {
                             width: 12
                             height: 12
                             anchors.centerIn: parent
-                            radius: 2
-                            color: "#FFFFFF"
+                            color: Theme.secondary
                             visible: noTriggerToggle.checked
                         }
                     }
@@ -103,15 +102,15 @@ FocusScope {
             }
 
             Row {
-                spacing: 12
+                spacing: Theme.spacingM
                 anchors.left: parent.left
                 anchors.right: parent.right
                 visible: !noTriggerToggle.checked
 
                 Text {
                     text: "Trigger:"
-                    font.pixelSize: 14
-                    color: "#FFFFFF"
+                    font.pixelSize: Theme.fontSizeMedium
+                    color: Theme.surfaceText
                     anchors.verticalCenter: parent.verticalCenter
                 }
 
@@ -122,7 +121,7 @@ FocusScope {
                     text: loadSettings("trigger", "!")
                     placeholderText: "!"
                     backgroundColor: "#30FFFFFF"
-                    textColor: "#FFFFFF"
+                    textColor: Theme.surfaceText
 
                     onTextEdited: {
                         const newTrigger = text.trim()
@@ -133,8 +132,8 @@ FocusScope {
 
                 Text {
                     text: "Examples: !, @, win, etc."
-                    font.pixelSize: 12
-                    color: "#AAFFFFFF"
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.surfaceText
                     anchors.verticalCenter: parent.verticalCenter
                 }
             }
@@ -152,9 +151,9 @@ FocusScope {
 
             Text {
                 text: "Features:"
-                font.pixelSize: 14
+                font.pixelSize: Theme.fontSizeMedium
                 font.weight: Font.Medium
-                color: "#FFFFFF"
+                color: Theme.surfaceText
             }
 
             Column {
@@ -163,32 +162,32 @@ FocusScope {
 
                 Text {
                     text: "• Lists all open windows from Niri WM"
-                    font.pixelSize: 12
-                    color: "#CCFFFFFF"
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.surfaceText
                 }
 
                 Text {
                     text: "• Shows window title and workspace location"
-                    font.pixelSize: 12
-                    color: "#CCFFFFFF"
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.surfaceText
                 }
 
                 Text {
                     text: "• Search by application name or window title"
-                    font.pixelSize: 12
-                    color: "#CCFFFFFF"
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.surfaceText
                 }
 
                 Text {
                     text: "• Focused windows appear first in the list"
-                    font.pixelSize: 12
-                    color: "#CCFFFFFF"
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.surfaceText
                 }
 
                 Text {
                     text: "• Click or press Enter to switch to a window"
-                    font.pixelSize: 12
-                    color: "#CCFFFFFF"
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.surfaceText
                 }
             }
         }
@@ -196,7 +195,7 @@ FocusScope {
         Rectangle {
             width: parent.width - 32
             height: 1
-            color: "#30FFFFFF"
+            color: Theme.outlineVariant
         }
 
         Column {
@@ -205,38 +204,38 @@ FocusScope {
 
             Text {
                 text: "Usage:"
-                font.pixelSize: 14
+                font.pixelSize: Theme.fontSizeMedium
                 font.weight: Font.Medium
-                color: "#FFFFFF"
+                color: Theme.surfaceText
             }
 
             Column {
-                spacing: 4
+                spacing: Theme.spacingXS
                 leftPadding: 16
                 bottomPadding: 24
 
                 Text {
                     text: "1. Open Launcher (Ctrl+Space or click launcher button)"
-                    font.pixelSize: 12
-                    color: "#CCFFFFFF"
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.surfaceText
                 }
 
                 Text {
                     text: noTriggerToggle.checked ? "2. Type to search windows (e.g., 'firefox' or 'code')" : "2. Type your trigger followed by a search term (e.g., '!firefox' or '!code')"
-                    font.pixelSize: 12
-                    color: "#CCFFFFFF"
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.surfaceText
                 }
 
                 Text {
                     text: "3. All matching windows will appear in the list"
-                    font.pixelSize: 12
-                    color: "#CCFFFFFF"
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.surfaceText
                 }
 
                 Text {
                     text: "4. Select a window and press Enter to switch to it"
-                    font.pixelSize: 12
-                    color: "#CCFFFFFF"
+                    font.pixelSize: Theme.fontSizeSmall
+                    color: Theme.surfaceText
                 }
             }
         }
@@ -244,7 +243,7 @@ FocusScope {
         Rectangle {
             width: parent.width - 32
             height: 1
-            color: "#30FFFFFF"
+            color: Theme.outlineVariant
         }
 
         Column {
@@ -253,15 +252,15 @@ FocusScope {
 
             Text {
                 text: "Note:"
-                font.pixelSize: 14
+                font.pixelSize: Theme.fontSizeMedium
                 font.weight: Font.Medium
-                color: "#FFFFFF"
+                color: Theme.surfaceText
             }
 
             Text {
                 text: "This plugin only works when running DMS on the Niri window manager. It will not show any items on other window managers."
-                font.pixelSize: 12
-                color: "#CCFFFFFF"
+                font.pixelSize: Theme.fontSizeSmall
+                color: Theme.surfaceText
                 wrapMode: Text.WordWrap
                 width: parent.width
                 bottomPadding: 24
