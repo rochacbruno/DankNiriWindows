@@ -46,7 +46,7 @@ QtObject {
             let workspaceName = "";
             const workspace = NiriService.workspaces[workspaceId];
             if (workspace) {
-                workspaceName = workspace.name || `Workspace ${workspace.idx + 1}`;
+                workspaceName = workspace.name || `Workspace ${workspace.idx}`;
             }
 
             const displayName = title || appId;
