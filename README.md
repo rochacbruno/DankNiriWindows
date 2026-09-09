@@ -4,7 +4,7 @@
 
 A launcher plugin that lists all open windows in the Niri window manager and allows quick switching between them.
 
-*Example: Type `!` to list all open windows with their workspace locations*
+*Example: Type `!` to list all open windows, or `!!` to list only windows on the current workspace.*
 
 Grid Mode
 
@@ -19,6 +19,7 @@ List Mode
 
 - **Window Listing**: Displays all open windows from the Niri window manager
 - **Smart Search**: Filter windows by application name, window title, or workspace
+- **Current Workspace Filter**: Repeat the configured trigger to show only windows on the current workspace
 - **Quick Switching**: Click or press Enter to instantly switch to any window
 - **Workspace Info**: Shows which workspace each window is on
 - **Smart Sorting**: Focused windows appear first, then sorted by workspace
@@ -55,16 +56,18 @@ git clone https://github.com/rochacbruno/DankNiriWindows NiriWindows
 ## Requirements
 
 - **Niri Window Manager**: This plugin only works when DMS is running on Niri WM
-- **DMS Version**: Requires DMS version > 0.1.18
+- **DMS Version**: Requires DMS version 0.1.18
 
 ## Usage
 
-### With Default Settings (! Trigger)
+### With Default Settings (`!` Trigger)
 
-1. Open the launcher (Ctrl+Space)
-2. Type `!` followed by a search term: `!firefox`
-3. All matching windows appear in the launcher
-4. Press Enter to switch to the selected window
+- **Show all windows on all workspaces**: `!`
+- **Search all workspaces for `firefox`**: `!firefox`
+- **Show all windows on current workspace**: `!!`
+- **Search current workspace for `firefox`**: `!!firefox`
+
+The current-workspace mode is activated by repeating the configured trigger. For example, if the trigger is changed to `@`, use `@` to show all windows on all workspaces and `@@` to show all windows on the current workspace. For multi-character triggers, separate a current-workspace search term with a space (for example, `winwin firefox`).
 
 ### Searching for Windows
 
@@ -72,23 +75,38 @@ git clone https://github.com/rochacbruno/DankNiriWindows NiriWindows
 - **By title**: `!document` - Shows windows with "document" in the title
 - **By workspace**: `!Workspace 2` - Shows windows on Workspace 2
 - **All windows**: `!` - Shows all open windows
+- **Current workspace**: `!!` - Shows all windows on the current workspace
+- **Current workspace search**: `!!firefox` - Shows Firefox windows on the current workspace
+
+### Always Active Mode
+
+Enable **Always Active** in the plugin settings to include Niri windows in regular launcher searches without an activation trigger. The repeated trigger remains the current-workspace shortcut.
+
+With the default trigger (`!`):
+
+- Open the launcher with an empty query to include all Niri windows
+- Type `firefox` to search windows across all workspaces
+- Type `!!` to show only windows on the current workspace
+- Type `!!firefox` to search Firefox windows only on the current workspace
 
 ### Customizing the Trigger
 
-You can configure a different trigger prefix or disable it entirely in the settings:
-
 1. Open Settings → Plugins → Niri Windows
-2. Change the trigger to a custom value (e.g., `win`, `@`, `w`)
-3. Or check "No trigger (always active)" to remove the prefix requirement
-4. In the launcher, type your configured trigger: `win firefox` or just `firefox` (if no trigger)
+2. Change the trigger to a custom value (e.g., `@` or `win`)
+3. Use the trigger once for all workspaces and repeat it for the current workspace (e.g., `@` / `@@` or `win` / `winwin`)
+4. Or enable **Always Active** to remove the activation-trigger requirement. The repeated trigger still selects the current workspace
 
 
-### Adding a keybinding (niri)
+### Adding keybindings (niri)
 
 ```kdl
 binds {
-      Alt+Tab hotkey-overlay-title="Switch Windows" {
+    Alt+Tab hotkey-overlay-title="Switch Windows" {
         spawn "dms" "ipc" "call" "spotlight" "openQuery" "!";
+    }
+
+    Mod+Shift+W hotkey-overlay-title="Windows on Current Workspace" {
+        spawn "dms" "ipc" "call" "spotlight" "openQuery" "!!";
     }
 }
 ```
@@ -119,8 +137,9 @@ Windows are sorted in the following order:
 The plugin integrates with DMS's NiriService to:
 1. Monitor all open windows via Niri's event stream
 2. Track window properties (app_id, title, workspace, focus state)
-3. Use `NiriService.focusWindow(windowId)` to switch windows
-4. Update the list in real-time when windows open/close
+3. Track the currently focused workspace for current-workspace filtering
+4. Use `NiriService.focusWindow(windowId)` to switch windows
+5. Refresh launcher results when windows or the focused workspace change
 
 ## Configuration
 
@@ -162,7 +181,7 @@ Settings are stored in `~/.config/DankMaterialShell/plugin_settings.json` under 
 
 ## Version
 
-1.0.0
+1.2.0
 
 ## Author
 

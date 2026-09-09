@@ -14,7 +14,10 @@ QtObject {
     Component.onCompleted: {
         if (!pluginService)
             return;
-        trigger = pluginService.loadPluginData("niriWindows", "trigger", "!");
+        const savedTrigger = pluginService.loadPluginData("niriWindows", "trigger", "!");
+        trigger = savedTrigger || "!";
+        if (!savedTrigger)
+            pluginService.savePluginData("niriWindows", "trigger", trigger);
     }
 
     property Connections niriConnections: Connections {
@@ -22,6 +25,25 @@ QtObject {
         function onWindowsChanged() {
             root.itemsChanged();
         }
+        function onAllWorkspacesChanged() {
+            root.itemsChanged();
+            if (pluginService && typeof pluginService.requestLauncherUpdate === "function")
+                pluginService.requestLauncherUpdate("niriWindows");
+        }
+    }
+
+    function getCurrentWorkspaceId() {
+        const workspaces = NiriService.allWorkspaces || [];
+        const focusedWorkspace = workspaces.find(workspace => workspace && workspace.is_focused);
+        if (focusedWorkspace)
+            return focusedWorkspace.id;
+
+        const windows = NiriService.windows || [];
+        const focusedWindow = windows.find(window => window && window.is_focused);
+        if (focusedWindow)
+            return focusedWindow.workspace_id;
+
+        return NiriService.focusedWorkspaceId || "";
     }
 
     function getItems(query) {
@@ -33,6 +55,28 @@ QtObject {
             return [];
 
         const lowerQuery = query ? query.toLowerCase().trim() : "";
+        const alwaysActive = pluginService
+            ? pluginService.loadPluginData("niriWindows", "noTrigger", false)
+            : false;
+        const configuredTrigger = pluginService
+            ? pluginService.loadPluginData("niriWindows", "trigger", trigger)
+            : trigger;
+        const normalizedTrigger = String(configuredTrigger || "").toLowerCase().trim();
+        const workspacePrefix = alwaysActive
+            ? normalizedTrigger + normalizedTrigger
+            : normalizedTrigger;
+
+        // DMS removes the activation trigger before calling getItems().
+        // In Always Active mode the full repeated trigger remains in the query.
+        const currentWorkspaceOnly = workspacePrefix.length > 0
+            && (lowerQuery === workspacePrefix
+                || (normalizedTrigger.length === 1
+                    ? lowerQuery.startsWith(workspacePrefix)
+                    : lowerQuery.startsWith(workspacePrefix + " ")));
+        const effectiveQuery = currentWorkspaceOnly
+            ? lowerQuery.substring(workspacePrefix.length).trim()
+            : lowerQuery;
+        const currentWorkspaceId = currentWorkspaceOnly ? getCurrentWorkspaceId() : "";
         const items = [];
 
         for (const window of windows) {
@@ -52,9 +96,12 @@ QtObject {
             const displayName = title || appId;
             const comment = title ? `${appId} • ${workspaceName}` : workspaceName;
 
-            if (lowerQuery.length > 0) {
+            if (currentWorkspaceOnly && String(workspaceId) !== String(currentWorkspaceId))
+                continue;
+
+            if (effectiveQuery.length > 0) {
                 const searchText = `${appId} ${title} ${workspaceName}`.toLowerCase();
-                if (!searchText.includes(lowerQuery))
+                if (!searchText.includes(effectiveQuery))
                     continue;
             }
 
@@ -70,6 +117,8 @@ QtObject {
                 comment: comment,
                 action: `focus:${windowId}`,
                 categories: ["Niri Windows"],
+                // Keep the repeated trigger searchable when DMS scores plugin results.
+                keywords: currentWorkspaceOnly ? [lowerQuery] : [],
                 _isFocused: window.is_focused || false,
                 _workspaceIdx: workspace ? workspace.idx : 999
             });
